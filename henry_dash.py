@@ -240,11 +240,11 @@ custom_colors = [tuple(int(h.lstrip('#')[i:i+2], 16)
 
 # map variables
 map_lat_2D = 33.455655212482505
-map_lat_3D = 33.55
+map_lat_3D = 33.495655212482505
 map_long = -84.14263138284856
 map_height = 330
 map_zoom_2D = 8.8  # higher numeric value = 'zooming in'
-map_zoom_3D = 6
+map_zoom_3D = 9
 
 
 def mapper_2D():
@@ -352,56 +352,6 @@ def mapper_2D():
         tooltip=tooltip
     )
 
-    # # ensure we're working with a geodataframe
-    # joined_df = gpd.GeoDataFrame(joined_df)
-
-    # # create map intitial state
-    # initial_view_state = pdk.ViewState(
-    #     latitude=map_lat_2D,
-    #     longitude=map_long,
-    #     zoom=map_zoom_2D,
-    #     max_zoom=15,
-    #     min_zoom=8,
-    #     pitch=0,
-    #     bearing=0,
-    #     height=map_height
-    # )
-
-    # geojson = pdk.Layer(
-    #     "GeoJsonLayer",
-    #     joined_df,
-    #     pickable=True,
-    #     autoHighlight=True,
-    #     highlight_color=[255, 255, 255, 80],
-    #     opacity=0.7,
-    #     stroked=True,
-    #     filled=True,
-    #     get_fill_color='choro_color',
-    #     get_line_color=[0, 0, 0, 255],
-    #     line_width_min_pixels=1
-    # )
-
-    # tooltip = {
-    #     "html": "<b>{Sub_geo}</b><br>\
-    #             Median price per SF: {price_sf_formatted}<br><hr style='border: 2px solid white; margin: 5px 0; padding: 0;'>\
-    #             Total sales: {unique_ID}<br>\
-    #             Median price: {price_formatted}<br>",
-    #     "style": {"background": "rgba(2,43,58,0.7)",
-    #               "border": "1px solid white",
-    #               "color": "white",
-    #               "font-family": "Helvetica",
-    #               "text-align": "center"
-    #               },
-    # }
-
-    # r = pdk.Deck(
-    #     layers=geojson,
-    #     initial_view_state=initial_view_state,
-    #     map_provider='mapbox',
-    #     map_style=base_map_dict[base_map],
-    #     tooltip=tooltip
-    # )
-
     return r
 
 
@@ -411,10 +361,11 @@ def mapper_3D():
     df = filter_data()[1]
 
     # read in geospatial
-    gdf = gpd.read_file('Data/Henry_CTs_dissolved.gpkg')
+    gdf = gpd.read_file('Data/Henry_CTs.gpkg')
+    gdf['GEOID'] = gdf['GEOID'].astype(str)
 
     # join together the 2, and let not man put asunder
-    joined_df = gdf.merge(df, left_on='Sub_geo', right_on='Sub_geo')
+    joined_df = gdf.merge(df, left_on='GEOID', right_on='GEOID')
 
     # ensure we're working with a geodataframe
     joined_df = gpd.GeoDataFrame(joined_df)
