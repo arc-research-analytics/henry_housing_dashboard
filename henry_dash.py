@@ -422,7 +422,7 @@ def mapper_3D():
     )
 
     tooltip = {
-        "html": "<b>{Sub_geo}</b><br>\
+        "html": "<b>{Sub_geo} Census Tract</b><br>\
                 Median price / SF (color): {price_sf_formatted}<br>\
                 Total sales (height): {total_sales}<br><hr style='border: 2px solid white; margin: 5px 0; padding: 0;'>\
                 Median price: {price_formatted}<br>",
